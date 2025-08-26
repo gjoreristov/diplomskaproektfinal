@@ -11,6 +11,14 @@ import { getDeviceById } from "@/lib/devices";
 import { ArrowLeft, Edit, Trash2, Clock, User as UserIcon } from "lucide-react";
 import { format } from "date-fns";
 import { Separator } from "@/components/ui/separator";
+import { getAllDevices } from "@/lib/devices";
+
+export async function generateStaticParams() {
+  const devices = getAllDevices();
+  return devices.map((device) => ({
+    id: device.id,
+  }));
+}
 
 export default function DeviceDetailPage() {
   const router = useRouter();
