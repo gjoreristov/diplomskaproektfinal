@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { DeviceFormData, ValidationResult } from "@/types";
-import { validateDeviceData, getSuggestions } from "@/lib/openai";
+import { validateDeviceData, getSuggestions, generateAIDescription } from "@/lib/openai";
 import { AlertCircle, CheckCircle2, RefreshCw } from "lucide-react";
 import { 
   Command,
@@ -32,6 +32,7 @@ const defaultFormData: DeviceFormData = {
   macAddress: "",
   room: "",
   description: "",
+  aiDescription: "",
 };
 
 export function DeviceForm({ onSubmit, initialData, isEditing = false }: DeviceFormProps) {
@@ -46,6 +47,7 @@ export function DeviceForm({ onSubmit, initialData, isEditing = false }: DeviceF
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGeneratingDescription, setIsGeneratingDescription] = useState(false);
+  const [isGeneratingAI, setIsGeneratingAI] = useState(false);
 
   useEffect(() => {
     // Generate description suggestions when IP or MAC address changes
@@ -104,6 +106,23 @@ export function DeviceForm({ onSubmit, initialData, isEditing = false }: DeviceF
     setSuggestions((prev) => ({ ...prev, description: descriptionSuggestions }));
     setSuggestionOpen((prev) => ({ ...prev, description: true }));
     setIsGeneratingDescription(false);
+  };
+
+  const handleGenerateAIDescription = async () => {
+    setIsGeneratingAI(true);
+    try {
+      const aiDescription = await generateAIDescription({
+        name: formData.name,
+        ipAddress: formData.ipAddress,
+        macAddress: formData.macAddress,
+        room: formData.room,
+      });
+      setFormData((prev) => ({ ...prev, aiDescription }));
+    } catch (error) {
+      console.error('Error generating AI description:', error);
+    } finally {
+      setIsGeneratingAI(false);
+    }
   };
 
   const handleSelectSuggestion = (field: string, value: string) => {
