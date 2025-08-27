@@ -278,6 +278,35 @@ export function DeviceForm({ onSubmit, initialData, isEditing = false }: DeviceF
               </Popover>
             </div>
           </div>
+          
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="aiDescription">AI-Generated Technical Description</Label>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleGenerateAIDescription}
+                disabled={!formData.name || !formData.ipAddress || !formData.macAddress || !formData.room || isGeneratingAI}
+                className="h-8"
+              >
+                <RefreshCw className={`w-4 h-4 mr-2 ${isGeneratingAI ? 'animate-spin' : ''}`} />
+                {isGeneratingAI ? 'Generating...' : 'Generate AI Description'}
+              </Button>
+            </div>
+            <Textarea
+              id="aiDescription"
+              name="aiDescription"
+              value={formData.aiDescription || ''}
+              onChange={handleChange}
+              placeholder="Click 'Generate AI Description' to create a technical description using ChatGPT"
+              rows={4}
+              className="bg-muted/50"
+            />
+            <p className="text-xs text-muted-foreground">
+              This field uses OpenAI's ChatGPT to generate comprehensive technical descriptions based on your device information.
+            </p>
+          </div>
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <Label htmlFor="description">Description</Label>

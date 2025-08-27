@@ -129,6 +129,17 @@ export default function DeviceDetailPage() {
                 <p className="mt-1">{device.description}</p>
               </div>
               
+              {device.aiDescription && (
+                <>
+                  <Separator />
+                  
+                  <div>
+                    <h3 className="text-sm font-medium text-muted-foreground">AI-Generated Technical Description</h3>
+                    <p className="mt-1 text-sm bg-muted/50 p-3 rounded-md">{device.aiDescription}</p>
+                  </div>
+                </>
+              )}
+              
               <Separator />
               
               <div className="grid grid-cols-1 gap-4">

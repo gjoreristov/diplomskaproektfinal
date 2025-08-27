@@ -210,13 +210,14 @@ export function DeviceTable({ devices, currentUser, onDelete, onUpdate }: Device
                 </div>
               </TableHead>
               <TableHead className="hidden lg:table-cell">Description</TableHead>
+              <TableHead className="hidden xl:table-cell">AI Description</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredAndSortedDevices.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="h-24 text-center">
+                <TableCell colSpan={7} className="h-24 text-center">
                   No devices found.
                 </TableCell>
               </TableRow>
@@ -234,6 +235,9 @@ export function DeviceTable({ devices, currentUser, onDelete, onUpdate }: Device
                   <TableCell className="hidden md:table-cell">{device.room}</TableCell>
                   <TableCell className="hidden lg:table-cell max-w-[300px] truncate">
                     {device.description}
+                  </TableCell>
+                  <TableCell className="hidden xl:table-cell max-w-[300px] truncate">
+                    {device.aiDescription || 'Not generated'}
                   </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
