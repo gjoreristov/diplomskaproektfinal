@@ -38,17 +38,9 @@ export default function AddDevicePage() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Add New Device</h1>
           <p className="text-muted-foreground mt-2">
-            Enter the details of the new network device. Use the AI-powered description generator for comprehensive technical documentation.
+            Enter the details of the new network device.
           </p>
         </div>
-        
-        <Alert>
-          <AlertCircle className="h-4 w-4" />
-          <AlertDescription>
-            <strong>OpenAI Integration:</strong> To use the AI description generator, add your OpenAI API key to the environment variable <code>NEXT_PUBLIC_OPENAI_API_KEY</code>. 
-            Without an API key, the system will use intelligent mock descriptions based on device patterns.
-          </AlertDescription>
-        </Alert>
         
         <div className="max-w-3xl">
           <DeviceForm onSubmit={handleSubmit} />

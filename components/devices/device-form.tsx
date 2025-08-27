@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { DeviceFormData, ValidationResult } from "@/types";
-import { validateDeviceData, getSuggestions, generateAIDescription } from "@/lib/openai";
+import { validateDeviceData, getSuggestions } from "@/lib/openai";
 import { AlertCircle, CheckCircle2, RefreshCw } from "lucide-react";
 import { 
   Command,
@@ -32,7 +32,6 @@ const defaultFormData: DeviceFormData = {
   macAddress: "",
   room: "",
   description: "",
-  aiDescription: "",
 };
 
 export function DeviceForm({ onSubmit, initialData, isEditing = false }: DeviceFormProps) {
@@ -47,7 +46,6 @@ export function DeviceForm({ onSubmit, initialData, isEditing = false }: DeviceF
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGeneratingDescription, setIsGeneratingDescription] = useState(false);
-  const [isGeneratingAI, setIsGeneratingAI] = useState(false);
 
   useEffect(() => {
     // Generate description suggestions when IP or MAC address changes
@@ -106,23 +104,6 @@ export function DeviceForm({ onSubmit, initialData, isEditing = false }: DeviceF
     setSuggestions((prev) => ({ ...prev, description: descriptionSuggestions }));
     setSuggestionOpen((prev) => ({ ...prev, description: true }));
     setIsGeneratingDescription(false);
-  };
-
-  const handleGenerateAIDescription = async () => {
-    setIsGeneratingAI(true);
-    try {
-      const aiDescription = await generateAIDescription({
-        name: formData.name,
-        ipAddress: formData.ipAddress,
-        macAddress: formData.macAddress,
-        room: formData.room,
-      });
-      setFormData((prev) => ({ ...prev, aiDescription }));
-    } catch (error) {
-      console.error('Error generating AI description:', error);
-    } finally {
-      setIsGeneratingAI(false);
-    }
   };
 
   const handleSelectSuggestion = (field: string, value: string) => {
@@ -296,35 +277,6 @@ export function DeviceForm({ onSubmit, initialData, isEditing = false }: DeviceF
                 </PopoverContent>
               </Popover>
             </div>
-          </div>
-          
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="aiDescription">AI-Generated Technical Description</Label>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={handleGenerateAIDescription}
-                disabled={!formData.name || !formData.ipAddress || !formData.macAddress || !formData.room || isGeneratingAI}
-                className="h-8"
-              >
-                <RefreshCw className={`w-4 h-4 mr-2 ${isGeneratingAI ? 'animate-spin' : ''}`} />
-                {isGeneratingAI ? 'Generating...' : 'Generate AI Description'}
-              </Button>
-            </div>
-            <Textarea
-              id="aiDescription"
-              name="aiDescription"
-              value={formData.aiDescription || ''}
-              onChange={handleChange}
-              placeholder="Click 'Generate AI Description' to create a technical description using ChatGPT"
-              rows={4}
-              className="bg-muted/50"
-            />
-            <p className="text-xs text-muted-foreground">
-              This field uses OpenAI's ChatGPT to generate comprehensive technical descriptions based on your device information.
-            </p>
           </div>
           <div className="space-y-2">
             <div className="flex items-center justify-between">

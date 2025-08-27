@@ -23,7 +23,6 @@ export interface DeviceFormData {
   macAddress: string;
   room: string;
   description: string;
-  aiDescription?: string;
 }
 
 export interface ValidationResult {
